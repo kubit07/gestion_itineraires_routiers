@@ -1,6 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:france_itineraire/components/location_list_tile.dart';
 import 'package:france_itineraire/constants.dart';
 
 class Home extends StatefulWidget {
@@ -11,7 +13,55 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-    @override
+  final _formKey = GlobalKey<FormState>();
+
+  final departureController = TextEditingController();
+  final arrivalController = TextEditingController();
+
+  List<dynamic> _items = [];
+  var jsonResponse;
+
+  @override
+  void initState() {
+    super.initState();
+    loadJsonData();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    departureController.dispose();
+    arrivalController.dispose();
+  }
+
+  Future<void> loadJsonData() async {
+    // Charger le fichier JSON
+    String jsonString =
+        await rootBundle.loadString('assets/files/villes_france.json');
+    // Décoder le JSON
+    jsonResponse = json.decode(jsonString);
+    setState(() {
+      _items = jsonResponse;
+    });
+  }
+
+  void filterItem(String itemName) {
+    List result = [];
+
+    if (itemName.trim().isEmpty) {
+      result = jsonResponse;
+    } else {
+      result = jsonResponse
+          .where((element) =>
+              element.toString().toLowerCase().contains(itemName.toLowerCase()))
+          .toList();
+    }
+    setState(() {
+      _items = result;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -23,24 +73,40 @@ class _HomeState extends State<Home> {
       body: Column(
         children: [
           Form(
+            key: _formKey,
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(left: defaultPadding, right: defaultPadding, top: defaultPadding),
+                  padding: const EdgeInsets.only(
+                      left: defaultPadding,
+                      right: defaultPadding,
+                      top: defaultPadding),
                   child: TextFormField(
-                    onChanged: (value) {},
+                    controller: departureController,
+                    onChanged: (value) => filterItem(value),
                     textInputAction: TextInputAction.search,
                     decoration: const InputDecoration(
                       hintText: "Départ",
+                      border: OutlineInputBorder(),
                     ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Tu dois remplir ce texte";
+                      }
+                      return null;
+                    },
                   ),
                 ),
                 const SizedBox(height: 2.0),
-
                 Padding(
-                  padding: const EdgeInsets.only(left: defaultPadding, right: defaultPadding, top: 8.0, bottom: defaultPadding),
+                  padding: const EdgeInsets.only(
+                      left: defaultPadding,
+                      right: defaultPadding,
+                      top: 8.0,
+                      bottom: defaultPadding),
                   child: TextFormField(
-                    onChanged: (value) {},
+                    controller: arrivalController,
+                    onChanged: (value) => filterItem(value),
                     textInputAction: TextInputAction.search,
                     decoration: const InputDecoration(
                       hintText: "Destination",
@@ -80,10 +146,32 @@ class _HomeState extends State<Home> {
             thickness: 4,
             color: secondaryColor5LightTheme,
           ),
-        /*   LocationListTile(
+          /*   LocationListTile(
             press: () {},
             location: "Banasree, Dhaka, Bangladesh",
-          ), */
+          ), 
+          */
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(defaultPadding),
+              child: SizedBox(
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: _items.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return GestureDetector(
+                        onTap: () {
+                          print("ok");
+                          setState(() {});
+                        },
+                        child: ListTile(
+                          title: Text(_items[index]),
+                        ),
+                      );
+                    }),
+              ),
+            ),
+          )
         ],
       ),
     );
