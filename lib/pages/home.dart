@@ -17,6 +17,10 @@ class _HomeState extends State<Home> {
 
   final departureController = TextEditingController();
   final arrivalController = TextEditingController();
+  final departureFocusNode = FocusNode();
+  final arrivalFocusNode = FocusNode();
+
+  int _screen = 0;
 
   List<dynamic> _items = [];
   var jsonResponse;
@@ -32,6 +36,8 @@ class _HomeState extends State<Home> {
     super.dispose();
     departureController.dispose();
     arrivalController.dispose();
+    departureFocusNode.dispose();
+    arrivalFocusNode.dispose();
   }
 
   Future<void> loadJsonData() async {
@@ -52,8 +58,11 @@ class _HomeState extends State<Home> {
       result = jsonResponse;
     } else {
       result = jsonResponse
-          .where((element) =>
-              element.toString().toLowerCase().contains(itemName.toLowerCase()))
+          .where((element) => element
+              .toString()
+              .trim()
+              .toLowerCase()
+              .contains(itemName.trim().toLowerCase()))
           .toList();
     }
     setState(() {
@@ -61,12 +70,33 @@ class _HomeState extends State<Home> {
     });
   }
 
+
+    // Function to find travel time between two cities
+  int? findTravelTime(String city1, String city2, String jsonString) {
+    // Decode the JSON string into a Map
+    Map<String, dynamic> data = json.decode(jsonString);
+
+    // Create the key for the cities in both possible orders
+    String key1 = "('$city1', '$city2')";
+    String key2 = "('$city2', '$city1')";
+
+    // Check if either key exists in the map and return the corresponding time
+    if (data.containsKey(key1)) {
+      return data[key1];
+    } else if (data.containsKey(key2)) {
+      return data[key2];
+    } else {
+      // Return null if no match is found
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Itinéraires",
+          "France Itinéraires",
           style: TextStyle(color: textColorLightTheme),
         ),
       ),
@@ -83,15 +113,17 @@ class _HomeState extends State<Home> {
                       top: defaultPadding),
                   child: TextFormField(
                     controller: departureController,
+                    focusNode: departureFocusNode,
                     onChanged: (value) => filterItem(value),
                     textInputAction: TextInputAction.search,
                     decoration: const InputDecoration(
                       hintText: "Départ",
-                      border: OutlineInputBorder(),
                     ),
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Tu dois remplir ce texte";
+                      if (value == null ||
+                          value.isEmpty ||
+                          value.trim().isEmpty) {
+                        return "vous devez choisir une ville de départ";
                       }
                       return null;
                     },
@@ -106,11 +138,20 @@ class _HomeState extends State<Home> {
                       bottom: defaultPadding),
                   child: TextFormField(
                     controller: arrivalController,
+                    focusNode: arrivalFocusNode,
                     onChanged: (value) => filterItem(value),
                     textInputAction: TextInputAction.search,
                     decoration: const InputDecoration(
                       hintText: "Destination",
                     ),
+                    validator: (value) {
+                      if (value == null ||
+                          value.isEmpty ||
+                          value.trim().isEmpty) {
+                        return "vous devez choisir une ville d'arrivée";
+                      }
+                      return null;
+                    },
                   ),
                 ),
               ],
@@ -124,12 +165,19 @@ class _HomeState extends State<Home> {
           Padding(
             padding: const EdgeInsets.all(defaultPadding),
             child: ElevatedButton.icon(
-              onPressed: () {},
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  FocusScope.of(context).unfocus();
+                  setState(() {
+                    _screen = 1;
+                  });
+                }
+              },
               icon: SvgPicture.asset(
                 "assets/icons/location.svg",
                 height: 16,
               ),
-              label: const Text("Use my Current Location"),
+              label: const Text("Valider"),
               style: ElevatedButton.styleFrom(
                 backgroundColor: secondaryColor10LightTheme,
                 foregroundColor: textColorLightTheme,
@@ -151,27 +199,38 @@ class _HomeState extends State<Home> {
             location: "Banasree, Dhaka, Bangladesh",
           ), 
           */
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(defaultPadding),
-              child: SizedBox(
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: _items.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return GestureDetector(
-                        onTap: () {
-                          print("ok");
-                          setState(() {});
-                        },
-                        child: ListTile(
-                          title: Text(_items[index]),
-                        ),
-                      );
-                    }),
-              ),
-            ),
-          )
+          _screen == 0
+              ? Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(defaultPadding),
+                    child: SizedBox(
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: _items.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return GestureDetector(
+                              onTap: () {
+                                if (departureFocusNode.hasFocus) {
+                                  departureController.text = _items[index];
+                                } else if (arrivalFocusNode.hasFocus) {
+                                  arrivalController.text = _items[index];
+                                }
+                              },
+                              child: ListTile(
+                                title: Text(_items[index]),
+                              ),
+                            );
+                          }),
+                    ),
+                  ),
+                )
+              : const Expanded(
+                  child: Center(
+                    child: Padding(
+                        padding: EdgeInsets.all(defaultPadding),
+                        child: CircularProgressIndicator()),
+                  ),
+                )
         ],
       ),
     );
