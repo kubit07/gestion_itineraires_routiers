@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:france_itineraire/constants.dart';
 
 class Home extends StatefulWidget {
@@ -21,9 +20,15 @@ class _HomeState extends State<Home> {
   final arrivalFocusNode = FocusNode();
 
   int _screen = 0;
+  var _time;
+  late String departure;
+  late String arrival;
 
   List<dynamic> _items = [];
-  var jsonResponse;
+  Map<String, dynamic> _items_times = {};
+
+  var jsonResponse_1;
+  var jsonResponse_2;
 
   @override
   void initState() {
@@ -41,13 +46,23 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> loadJsonData() async {
-    // Charger le fichier JSON
-    String jsonString =
+    // Charger le fichier JSON des villes de France
+    String jsonString_1 =
         await rootBundle.loadString('assets/files/villes_france.json');
-    // Décoder le JSON
-    jsonResponse = json.decode(jsonString);
+
+    // Charger le fichier JSON du temps entre les villes
+    String jsonString_2 = await rootBundle.loadString('assets/files/13.json');
+
+    // Décoder le JSON 1
+    jsonResponse_1 = json.decode(jsonString_1);
     setState(() {
-      _items = jsonResponse;
+      _items = jsonResponse_1;
+    });
+
+    // Décoder le JSON 2
+    jsonResponse_2 = json.decode(jsonString_2);
+    setState(() {
+      _items_times = jsonResponse_2;
     });
   }
 
@@ -55,9 +70,9 @@ class _HomeState extends State<Home> {
     List result = [];
 
     if (itemName.trim().isEmpty) {
-      result = jsonResponse;
+      result = jsonResponse_1;
     } else {
-      result = jsonResponse
+      result = jsonResponse_1
           .where((element) => element
               .toString()
               .trim()
@@ -70,21 +85,14 @@ class _HomeState extends State<Home> {
     });
   }
 
-
-    // Function to find travel time between two cities
-  int? findTravelTime(String city1, String city2, String jsonString) {
-    // Decode the JSON string into a Map
-    Map<String, dynamic> data = json.decode(jsonString);
-
+  // Function to find travel time between two cities
+  findTravelTime(String city1, String city2) {
     // Create the key for the cities in both possible orders
     String key1 = "('$city1', '$city2')";
-    String key2 = "('$city2', '$city1')";
 
     // Check if either key exists in the map and return the corresponding time
-    if (data.containsKey(key1)) {
-      return data[key1];
-    } else if (data.containsKey(key2)) {
-      return data[key2];
+    if (_items_times.containsKey(key1)) {
+      return _items_times[key1];
     } else {
       // Return null if no match is found
       return null;
@@ -93,6 +101,10 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    // Récupérer la largeur et la hauteur de l'écran
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -171,6 +183,20 @@ class _HomeState extends State<Home> {
                   setState(() {
                     _screen = 1;
                   });
+
+                  _time = findTravelTime(
+                      departureController.text, arrivalController.text);
+                  if (_time != null) {
+                    departure = departureController.text;
+                    arrival = arrivalController.text;
+                    setState(() {
+                      _screen = 2;
+                    });
+                  } else {
+                    setState(() {
+                      _screen = 3;
+                    });
+                  }
                 }
               },
               icon: SvgPicture.asset(
@@ -199,7 +225,7 @@ class _HomeState extends State<Home> {
             location: "Banasree, Dhaka, Bangladesh",
           ), 
           */
-          _screen == 0
+          (_screen == 0)
               ? Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(defaultPadding),
@@ -224,13 +250,70 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                 )
-              : const Expanded(
-                  child: Center(
-                    child: Padding(
-                        padding: EdgeInsets.all(defaultPadding),
-                        child: CircularProgressIndicator()),
-                  ),
-                )
+              : (_screen == 1)
+                  ? const Expanded(
+                      child: Center(
+                          child: Padding(
+                              padding: EdgeInsets.all(defaultPadding),
+                              child: CircularProgressIndicator())))
+                  : (_screen == 2)
+                      ? SizedBox(
+                          width: screenWidth * 0.94,
+                          height: screenHeight * 0.14,
+                          child: Card(
+                            color: const Color.fromARGB(255, 222, 224, 207),
+                            child: Padding(
+                              padding: const EdgeInsets.all(defaultPadding),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Text(
+                                        departure,
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const Text(
+                                        '->',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Text(
+                                        arrival,
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 12),
+                                  Text(
+                                    'Temps du Trajet: $_time min',
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        )
+                      : const Expanded(
+                          child: Center(child: Text("Aucune Données sur le temps de Trajet",style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    )))),
         ],
       ),
     );
