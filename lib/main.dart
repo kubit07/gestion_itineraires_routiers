@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:france_itineraire/theme.dart';
 import 'package:global_bottom_navigation_bar/global_bottom_navigation_bar.dart';
-
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:france_itineraire/pages/home.dart';
 import 'package:france_itineraire/pages/hourly.dart';
 import 'package:france_itineraire/pages/distance.dart';
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: lightTheme(context),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const KeyboardVisibilityProvider(child: MyHomePage(title: 'Flutter Demo Home Page')),
     );
   }
 }

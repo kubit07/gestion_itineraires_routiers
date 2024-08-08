@@ -1,7 +1,8 @@
 import 'dart:convert';
-
+import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:france_itineraire/constants.dart';
 
 class Home extends StatefulWidget {
@@ -105,6 +106,9 @@ class _HomeState extends State<Home> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
+    final bool isKeyboardVisible =
+        KeyboardVisibilityProvider.isKeyboardVisible(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -197,6 +201,10 @@ class _HomeState extends State<Home> {
                       _screen = 3;
                     });
                   }
+                } else {
+                  setState(() {
+                    _screen = 0;
+                  });
                 }
               },
               icon: SvgPicture.asset(
@@ -225,7 +233,7 @@ class _HomeState extends State<Home> {
             location: "Banasree, Dhaka, Bangladesh",
           ), 
           */
-          (_screen == 0)
+          (isKeyboardVisible == true) || (_screen == 0)
               ? Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(defaultPadding),
@@ -265,7 +273,8 @@ class _HomeState extends State<Home> {
                             child: Padding(
                               padding: const EdgeInsets.all(defaultPadding),
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   Row(
                                     mainAxisAlignment:
@@ -309,11 +318,14 @@ class _HomeState extends State<Home> {
                           ),
                         )
                       : const Expanded(
-                          child: Center(child: Text("Aucune Données sur le temps de Trajet",style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    )))),
+                          child: Center(
+                              child:
+                                  Text("Aucune Données sur le temps de Trajet",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      )))),
         ],
       ),
     );
