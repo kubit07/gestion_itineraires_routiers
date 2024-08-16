@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:france_itineraire/theme.dart';
+import 'package:france_itineraire/core/theme.dart';
 import 'package:global_bottom_navigation_bar/global_bottom_navigation_bar.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:france_itineraire/pages/home.dart';

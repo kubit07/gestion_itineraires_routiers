@@ -1,0 +1,5 @@
+class ServerConfigs {
+  static String base_url = "http://10.188.201.162:5000";
+  static String api_get_departure_time_arrival_url = "$base_url/routes/route/time";
+  static String bearer_token = r"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyMzgwMTk1MiwianRpIjoiMDBlYzI0NWEtOTQzMS00OTA2LTliNmEtMjdlNDY0YjIzN2ExIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImRhdmlkQGdtYWlsLmNvbSIsIm5iZiI6MTcyMzgwMTk1MiwiY3NyZiI6ImQyOTMyZTU0LTViNWItNDcwMy05MmQ2LTljZTRhMzYyMWY3OCIsImV4cCI6MTczMTU3Nzk1Mn0.0QU54MJ20zQI8Py-L2OoxIQRtNQvqSlRcarlsXcxopo";
+}
