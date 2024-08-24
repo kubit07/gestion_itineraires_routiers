@@ -15,5 +15,6 @@ Future<TravelTime> getDepartureTimeArrival(
       },
       body: body_request);
   final body = json.decode(response.body);
+
   return TravelTime.fromJson(body);
 }

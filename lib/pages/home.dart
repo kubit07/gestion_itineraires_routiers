@@ -227,7 +227,7 @@ class _HomeState extends State<Home> {
                       // once data is fetched, display it on screen (call buildPosts())
                       final post = snapshot.data!;
                       return CityTravelCard(context, post.departure,
-                          post.arrival, post.timeTravel);
+                          post.arrival, post.travel, post.timeTravel);
                     } else {
                       // if no data, show simple Text
                       return const Expanded(
@@ -248,14 +248,44 @@ class _HomeState extends State<Home> {
   }
 }
 
-Widget CityTravelCard(BuildContext context, departure, arrival, timeTravel) {
+String convertirMinutesEnHeuresEtMinutes(String minutesString) {
+  // Conversion de la chaîne de caractères en entier
+  int totalMinutes = int.parse(minutesString);
+
+  // Calcul des heures et des minutes restantes
+  int heures = totalMinutes ~/ 60;
+  int minutes = totalMinutes % 60;
+
+  // Construction de la chaîne de résultat
+  if (heures > 0 && minutes > 0) {
+    return '$heures heures et $minutes minutes';
+  } else if (heures > 0) {
+    return '$heures heures';
+  } else {
+    return '$minutes minutes';
+  }
+}
+
+Widget CityTravelCard(
+    BuildContext context, departure, arrival, travel, timeTravel) {
   // Récupérer la largeur et la hauteur de l'écran
   double screenWidth = MediaQuery.of(context).size.width;
   double screenHeight = MediaQuery.of(context).size.height;
 
+  String villesString = "";
+
+  if (travel != '') {
+    // Suppression des crochets au début et à la fin de la chaîne
+    villesString = travel.substring(1, travel.length - 1);
+    villesString = villesString.replaceAll(",", "->");
+  }
+
+  String time = convertirMinutesEnHeuresEtMinutes(timeTravel);
+  double heightWidth =  (travel != '') ? screenHeight * 0.285 : screenHeight * 0.14;
+
   return SizedBox(
     width: screenWidth * 0.94,
-    height: screenHeight * 0.14,
+    height : heightWidth,
     child: Card(
       color: const Color.fromARGB(255, 222, 224, 207),
       child: Padding(
@@ -283,17 +313,26 @@ Widget CityTravelCard(BuildContext context, departure, arrival, timeTravel) {
                 Text(
                   arrival,
                   style: const TextStyle(
-                    fontSize: 20,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+            (travel != '')
+                ? Text(
+                    villesString,
+                    softWrap: true,
+                    style: const TextStyle(
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
+                : const SizedBox(height: 10.0),
             Text(
-              'Temps du Trajet: $timeTravel min',
+              'Temps du Trajet: $time',
               style: const TextStyle(
-                fontSize: 20,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
