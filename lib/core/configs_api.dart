@@ -1,5 +1,5 @@
 class ServerConfigs {
-  static String base_url = "http://10.188.201.162:5000";
+  static String base_url = "http://194.57.103.203:8000";
   static String api_get_departure_time_arrival_url = "$base_url/routes/route/time";
-  static String bearer_token = r"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyNDQ0ODgxOCwianRpIjoiZmE2MjhkYTYtMzg4Mi00ZTIxLWJmYTQtMzk0ZDIxZTRkOThkIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImRhdmlkQGdtYWlsLmNvbSIsIm5iZiI6MTcyNDQ0ODgxOCwiY3NyZiI6IjJiYjMwOWE0LWM1OGMtNDZkYy1hMjBmLTJkNGQzZGE3YjljMSIsImV4cCI6MTczMjIyNDgxOH0.ca-qElhsnEEZP1oYJgWtK2zQ4IExLSMBH3MxMrycb3c";
+  static String bearer_token = r"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyNDU0NDQxNCwianRpIjoiYzBiYjBjOTEtNDBkOS00YWI1LTkxOTctNjVlMzNlOGZlYWY1IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImRhdmlkQGdtYWlsLmNvbSIsIm5iZiI6MTcyNDU0NDQxNCwiY3NyZiI6ImRlMTlkMmFkLWI4MTEtNGVmNy04OWJhLTM4OWFiM2FlMDNlNyIsImV4cCI6MTczMjMyMDQxNH0.ukz-ZqBv3oeWFOvKT8kM-OY-t693ZW-ZTjMYdXsBt_U";
 }

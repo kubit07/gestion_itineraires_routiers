@@ -7,7 +7,6 @@ import 'package:france_itineraire/pages/hourly.dart';
 import 'package:france_itineraire/pages/distance.dart';
 import 'package:france_itineraire/pages/traffic.dart';
 
-
 void main() {
   runApp(const MyApp());
 }
@@ -20,8 +19,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: lightTheme(context),
-      home: const KeyboardVisibilityProvider(child: MyHomePage(title: 'Flutter Demo Home Page')),
+      home: const KeyboardVisibilityProvider(
+          child: MyHomePage(title: 'Flutter Demo Home Page')),
     );
   }
 }
@@ -44,54 +45,54 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
+class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return ScaffoldGlobalBottomNavigation(
       listOfChild: const [
         Home(),
         Distance(),
-        Traffic(),
-        Hourly(),
+        //Traffic(),
+        //Hourly(),
       ],
       listOfBottomNavigationItem: buildBottomNavigationItemList(),
     );
   }
 
   List<BottomNavigationItem> buildBottomNavigationItemList() => [
-    BottomNavigationItem(
-      activeIcon: const Icon(
-        Icons.home_filled,
-        color: Colors.blue,
-        size: 18,
-      ),
-      inActiveIcon: const Icon(
-        Icons.home,
-        color: Colors.grey,
-        size: 21,
-      ),
-      title: "Home",
-      color: Colors.white,
-      vSync: this,
-    ),
+        BottomNavigationItem(
+          activeIcon: const Icon(
+            Icons.home_filled,
+            color: Colors.blue,
+            size: 18,
+          ),
+          inActiveIcon: const Icon(
+            Icons.home,
+            color: Colors.grey,
+            size: 21,
+          ),
+          title: "Home",
+          color: Colors.white,
+          vSync: this,
+        ),
 
-    BottomNavigationItem(
-      activeIcon: const Icon(
-        Icons.maps_home_work,
-        color: Colors.blue,
-        size: 18,
-      ),
-      inActiveIcon: const Icon(
-        Icons.map,
-        color: Colors.grey,
-        size: 21,
-      ),
-      title: 'Maps',
-      color: Colors.white,
-      vSync: this,
-    ),
+        BottomNavigationItem(
+          activeIcon: const Icon(
+            Icons.maps_home_work,
+            color: Colors.blue,
+            size: 18,
+          ),
+          inActiveIcon: const Icon(
+            Icons.map,
+            color: Colors.grey,
+            size: 21,
+          ),
+          title: 'Maps',
+          color: Colors.white,
+          vSync: this,
+        )
 
-    BottomNavigationItem(
+        /* BottomNavigationItem(
       activeIcon: const Icon(
         Icons.schedule,
         color: Colors.blue,
@@ -105,9 +106,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
       title: 'Hourly',
       color: Colors.white,
       vSync: this,
-    ),
+    ), */
 
-    BottomNavigationItem(
+        /* BottomNavigationItem(
       activeIcon: const Icon(
         Icons.star,
         color: Colors.blue,
@@ -121,6 +122,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
       title: 'Favoris',
       color: Colors.white,
       vSync: this,
-    ),
-  ];
+    ), */
+      ];
 }

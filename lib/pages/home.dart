@@ -281,11 +281,12 @@ Widget CityTravelCard(
   }
 
   String time = convertirMinutesEnHeuresEtMinutes(timeTravel);
-  double heightWidth =  (travel != '') ? screenHeight * 0.285 : screenHeight * 0.14;
+  double heightWidth =
+      (travel != '') ? screenHeight * 0.285 : screenHeight * 0.14;
 
   return SizedBox(
     width: screenWidth * 0.94,
-    height : heightWidth,
+    height: heightWidth,
     child: Card(
       color: const Color.fromARGB(255, 222, 224, 207),
       child: Padding(
@@ -300,20 +301,30 @@ Widget CityTravelCard(
                   departure,
                   style: const TextStyle(
                     fontSize: 20,
+                    color: Colors.black87,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const Text(
-                  '->',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                const Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Icon(
+                      Icons.arrow_forward_outlined, // The icon to display
+                      color: Colors.black, // The color of the icon
+                      size: 30.0, // The size of the icon
+                    ),
+                    Icon(
+                      Icons.directions_car, // The icon to display
+                      color: Colors.black, // The color of the icon
+                      size: 20.0, // The size of the icon
+                    ),
+                  ],
                 ),
                 Text(
                   arrival,
                   style: const TextStyle(
-                    fontSize: 16,
+                    color: Colors.black87,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -331,8 +342,9 @@ Widget CityTravelCard(
                 : const SizedBox(height: 10.0),
             Text(
               'Temps du Trajet: $time',
+              softWrap: true,
               style: const TextStyle(
-                fontSize: 16,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
