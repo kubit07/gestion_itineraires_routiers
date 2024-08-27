@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="france_itineraire"
+        android:label="France Itinéraires "
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
