@@ -26,7 +26,7 @@ class _HomeState extends State<Home> {
   late String departure;
   late String arrival;
   late Future<TravelTime> travelTimeFuture;
-  int _screen = 0;
+  int _screen = 0; // permet de switcher les écrans
   List<dynamic> _items = [];
 
   var jsonResponse_1;
@@ -47,7 +47,15 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> loadJsonData() async {
-    // Charger le fichier JSON des villes de France
+  /// Méthode asynchrone pour charger et décoder un fichier JSON contenant 
+  /// les villes de France.
+  ///
+  /// - `rootBundle.loadString('assets/files/villes_france.json')` charge le contenu 
+  ///   du fichier JSON situé dans les assets de l'application.
+  /// - Le contenu JSON est ensuite décodé en un objet Dart à l'aide de `json.decode`.
+  /// - Le résultat est stocké dans `_items` via `setState` pour mettre à jour 
+  ///   l'interface utilisateur avec les données chargées.
+
     String jsonString_1 =
         await rootBundle.loadString('assets/files/villes_france.json');
 
@@ -59,6 +67,8 @@ class _HomeState extends State<Home> {
   }
 
   void filterItem(String itemName) {
+    /// Fonction pour filtrer la recherche de ville de départ et d'arrivé 
+    /// dans les saisies de zones de départ et d'arrivé
     List result = [];
 
     if (itemName.trim().isEmpty) {
@@ -79,6 +89,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    // construction de l'interface graphique principale de l'application
     final bool isKeyboardVisible =
         KeyboardVisibilityProvider.isKeyboardVisible(context);
 
@@ -155,6 +166,7 @@ class _HomeState extends State<Home> {
             padding: const EdgeInsets.all(defaultPadding),
             child: ElevatedButton.icon(
               onPressed: () {
+                // validation des champs  (villes de départ et d'arrivé)
                 if (_formKey.currentState!.validate()) {
                   FocusScope.of(context).unfocus();
                   setState(() {
@@ -185,11 +197,6 @@ class _HomeState extends State<Home> {
             thickness: 4,
             color: secondaryColor5LightTheme,
           ),
-          /*   LocationListTile(
-            press: () {},
-            location: "Banasree, Dhaka, Bangladesh",
-          ), 
-          */
           (isKeyboardVisible == true) || (_screen == 0)
               ? Expanded(
                   child: Padding(
@@ -219,6 +226,7 @@ class _HomeState extends State<Home> {
                   future: getDepartureTimeArrival(
                       departureController.text, arrivalController.text),
                   builder: (context, snapshot) {
+                    // builder pour recevoir la données de l'Api
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       // until data is fetched, show loader
                       return const Expanded(
@@ -249,7 +257,8 @@ class _HomeState extends State<Home> {
 }
 
 String convertirMinutesEnHeuresEtMinutes(String minutesString) {
-  // Conversion de la chaîne de caractères en entier
+  // fonctions permettant de convertir un temps en chaine de carctères
+  // en Heures et Minutes
   int totalMinutes = int.parse(minutesString);
 
   // Calcul des heures et des minutes restantes
@@ -267,7 +276,9 @@ String convertirMinutesEnHeuresEtMinutes(String minutesString) {
 }
 
 Widget CityTravelCard(
-    BuildContext context, departure, arrival, travel, timeTravel) {
+  // Card peremettant d'afficher le temps de trajet entre la ville de départ et d'arrivé
+  // 
+  BuildContext context, departure, arrival, travel, timeTravel) {
   // Récupérer la largeur et la hauteur de l'écran
   double screenWidth = MediaQuery.of(context).size.width;
   double screenHeight = MediaQuery.of(context).size.height;

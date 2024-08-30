@@ -1,3 +1,24 @@
+/// La classe `TravelTime` représente les informations liées à un trajet, 
+/// comprenant la ville de départ, la ville d'arrivée, l'itinéraire du trajet, 
+/// et la durée du trajet.
+///
+/// Attributs :
+/// - `departure` : Ville de départ.
+/// - `arrival` : Ville d'arrivée.
+/// - `travel` : Itinéraire du trajet.
+/// - `timeTravel` : Durée du trajet en temps sous forme de chaîne de caractères.
+///
+/// Constructeur :
+/// - Le constructeur `TravelTime` est utilisé pour créer une instance de la classe 
+///   avec des valeurs requises pour chaque attribut.
+///
+/// Méthodes :
+/// - `fromJson` : Méthode factory qui permet de créer une instance de `TravelTime` à partir d'un 
+///   objet JSON.
+/// - `toJson` : Convertit une instance de `TravelTime` en un objet JSON.
+
+// ignore_for_file: file_names
+
 import 'dart:convert';
 
 class TravelTime {

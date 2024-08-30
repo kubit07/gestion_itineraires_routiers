@@ -3,9 +3,7 @@ import 'package:france_itineraire/core/theme.dart';
 import 'package:global_bottom_navigation_bar/global_bottom_navigation_bar.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:france_itineraire/pages/home.dart';
-import 'package:france_itineraire/pages/hourly.dart';
 import 'package:france_itineraire/pages/distance.dart';
-import 'package:france_itineraire/pages/traffic.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,7 +11,6 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -52,8 +49,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       listOfChild: const [
         Home(),
         Distance(),
-        //Traffic(),
-        //Hourly(),
       ],
       listOfBottomNavigationItem: buildBottomNavigationItemList(),
     );
@@ -91,37 +86,5 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           color: Colors.white,
           vSync: this,
         )
-
-        /* BottomNavigationItem(
-      activeIcon: const Icon(
-        Icons.schedule,
-        color: Colors.blue,
-        size: 18,
-      ),
-      inActiveIcon: const Icon(
-        Icons.schedule,
-        color: Colors.grey,
-        size: 21,
-      ),
-      title: 'Hourly',
-      color: Colors.white,
-      vSync: this,
-    ), */
-
-        /* BottomNavigationItem(
-      activeIcon: const Icon(
-        Icons.star,
-        color: Colors.blue,
-        size: 18,
-      ),
-      inActiveIcon: const Icon(
-        Icons.star_border,
-        color: Colors.grey,
-        size: 21,
-      ),
-      title: 'Favoris',
-      color: Colors.white,
-      vSync: this,
-    ), */
       ];
 }

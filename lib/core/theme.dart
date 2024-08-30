@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'constants.dart';
 
+// Construction d'un Thème clair personnalisé avec couleurs, styles de texte, AppBar, boutons, icônes, et bordures.
+
 ThemeData lightTheme(BuildContext context) {
   return ThemeData(
     scaffoldBackgroundColor: Color.fromARGB(255, 255, 255, 255),
